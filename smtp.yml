@@ -74,10 +74,20 @@ provision:
     outputs: terraform/provision/outputs.tf
     provider: terraform/provision/provider.tf
     variables: terraform/provision/variables.tf
+    verification: terraform/provision/verification.tf
   outputs:
   - field_name: region
     type: string
     details: AWS region for the SES instance
+  - field_name: dkim_records
+    type: object
+    details: If a domain was supplied DKIM records to be created
+  - field_name: verification_record
+    type: object
+    details: If a domain was supplied, TXT record to be created
+  - field_name: instructions
+    type: string
+    details: Any further steps are needed before using the service.
 bind:
   plan_inputs: []
   user_inputs:

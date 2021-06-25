@@ -4,3 +4,7 @@ variable "instance_name" {
   type    = string
   default = ""
 }
+
+variable region { 
+  type = string 
+}

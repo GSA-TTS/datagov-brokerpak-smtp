@@ -20,13 +20,13 @@ service_definitions:
 - smtp.yml
 parameters: []
 required_env_variables:
-  - SMTP_AWS_ACCESS_KEY_ID
-  - SMTP_AWS_SECRET_ACCESS_KEY
-  - SMTP_AWS_ZONE
-  - SMTP_AWS_DEFAULT_REGION
+  - AWS_ACCESS_KEY_ID
+  - AWS_SECRET_ACCESS_KEY
+  - AWS_ZONE
+  - AWS_DEFAULT_REGION
 env_config_mapping:
-  SMTP_AWS_ACCESS_KEY_ID: smtp.aws.access_key_id
-  SMTP_AWS_SECRET_ACCESS_KEY: smtp.aws.secret_access_key
-  SMTP_AWS_ZONE: smtp.aws.zone
-  SMTP_AWS_DEFAULT_REGION: smtp.aws.default_region
+  AWS_ACCESS_KEY_ID: aws.access_key_id
+  AWS_SECRET_ACCESS_KEY: aws.secret_access_key
+  AWS_ZONE: aws.zone
+  AWS_DEFAULT_REGION: aws.default_region
 

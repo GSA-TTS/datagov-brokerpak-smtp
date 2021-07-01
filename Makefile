@@ -27,6 +27,13 @@ CLOUD_BIND_PARAMS="{}"
 PREREQUISITES = docker jq eden
 K := $(foreach prereq,$(PREREQUISITES),$(if $(shell which $(prereq)),some string,$(error "Missing prerequisite commands $(prereq)")))
 
+check:
+	@echo EDEN_EXEC: $(EDEN_EXEC)
+	@echo SERVICE_NAME: $(SERVICE_NAME)
+	@echo PLAN_NAME: $(PLAN_NAME)
+	@echo CLOUD_PROVISION_PARAMS: $(CLOUD_PROVISION_PARAMS)
+	@echo CLOUD_BIND_PARAMS: $(CLOUD_BIND_PARAMS)
+
 clean: demo-down down ## Bring down the broker service if it's up and clean out the database
 	@-docker rm -f csb-service
 	@-rm *.brokerpak

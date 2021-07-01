@@ -21,7 +21,7 @@ provision:
     - field_name: region
       type: string
       details: The region of the SES service.
-      default: ${config("smtp.aws.default_region")}
+      default: ${config("aws.default_region")}
       enum:
         us-east-2 : us-east-2
         us-east-1 : us-east-1
@@ -49,18 +49,10 @@ provision:
       details: Domain to send mail from
       default: ""
   computed_inputs:
-  - name: aws_access_key_id
-    overwrite: true
-    type: string
-    default: ${config("smtp.aws.access_key_id")}
-  - name: aws_secret_access_key
-    overwrite: true
-    type: string
-    default: ${config("smtp.aws.secret_access_key")}
   - name: default_domain
     overwrite: true
     type: string
-    default: ${config("smtp.aws.zone")}
+    default: ${config("aws.zone")}
   - name: labels
     default: ${json.marshal(request.default_labels)}
     overwrite: true
@@ -91,14 +83,6 @@ provision:
 bind:
   plan_inputs: []
   user_inputs:
-  - field_name: aws_access_key_id
-    type: string
-    details: AWS access key
-    default: ${config("aws.access_key_id")}
-  - field_name: aws_secret_access_key
-    type: string
-    details: AWS secret key
-    default: ${config("aws.secret_access_key")}
   computed_inputs:
   - name: region
     default: ${instance.details["region"]}

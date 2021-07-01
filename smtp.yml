@@ -80,6 +80,9 @@ provision:
   - field_name: instructions
     type: string
     details: Any further steps are needed before using the service.
+  - field_name: domain_arn
+    type: string
+    details: Instance SES domain identity (used when creating bindings)
 bind:
   plan_inputs: []
   user_inputs:
@@ -88,8 +91,12 @@ bind:
     default: ${instance.details["region"]}
     overwrite: true
     type: string
+  - name: domain_arn
+    default: ${instance.details["domain_arn"]}
+    overwrite: true
+    type: string
   - name: user_name
-    default: csb-${request.binding_id}
+    default: csb-${instance.name}-${request.binding_id}
     overwrite: true
     type: string
   - name: instance_name

@@ -8,3 +8,7 @@ variable "instance_name" {
 variable region { 
   type = string 
 }
+
+variable domain_arn {
+  type = string
+}

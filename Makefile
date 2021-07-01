@@ -35,7 +35,7 @@ check:
 	@echo CLOUD_BIND_PARAMS: $(CLOUD_BIND_PARAMS)
 
 clean: demo-down down ## Bring down the broker service if it's up and clean out the database
-	@-docker rm -f csb-service
+	@-docker rm -f csb-service-$(SERVICE_NAME)
 	@-rm *.brokerpak
 
 # Origin of the subdirectory dependency solution: 
@@ -54,19 +54,19 @@ up: ## Run the broker service with the brokerpak configured. The broker listens 
 	-e "DB_TYPE=sqlite3" \
 	-e "DB_PATH=/tmp/csb-db" \
 	--env-file .env.secrets \
-	--name csb-service \
+	--name csb-service-$(SERVICE_NAME) \
 	--health-cmd="wget --header=\"X-Broker-API-Version: 2.16\" --no-verbose --tries=1 --spider http://$(SECURITY_USER_NAME):$(SECURITY_USER_PASSWORD)@localhost:8080/v2/catalog || exit 1" \
 	--health-interval=2s \
 	--health-retries=30 \
 	-d \
 	--rm \
 	$(CSB) serve
-	@while [ "`docker inspect -f {{.State.Health.Status}} csb-service`" != "healthy" ]; do   echo "Waiting for csb-service to be ready..." ; sleep 2; done
+	@while [ "`docker inspect -f {{.State.Health.Status}} csb-service-$(SERVICE_NAME)`" != "healthy" ]; do   echo "Waiting for csb-service to be ready..." ; sleep 2; done
 	@echo "csb-service is ready!" ; echo ""
 	@docker ps -l
 
 down: .env.secrets ## Bring the cloud-service-broker service down
-	@-docker stop csb-service
+	@-docker stop csb-service-$(SERVICE_NAME)
 
 # Normally we would just run `$(CSB) client run-examples` to test the brokerpak.
 # However, we may need to run tests between bind and unbind. So, we'll

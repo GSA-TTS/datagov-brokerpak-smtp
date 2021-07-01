@@ -5,27 +5,28 @@ metadata:
   author: Bret Mogilefsky
 platforms:
 - os: linux
-  arch: "386"
-- os: linux
   arch: amd64
 terraform_binaries:
 - name: terraform
   version: 0.12.30
   source: https://github.com/hashicorp/terraform/archive/v0.12.30.zip  
 - name: terraform-provider-aws
-  version: 3.35.0
-  source: https://github.com/terraform-providers/terraform-provider-aws/archive/v3.35.0.zip
+  version: 3.46.0
+  source: https://github.com/terraform-providers/terraform-provider-aws/archive/v3.46.0.zip
+- name: terraform-provider-null
+  version: 3.1.0
+  source: https://releases.hashicorp.com/terraform-provider-null/3.1.0/terraform-provider-null_3.1.0_linux_amd64.zip
 service_definitions:
 - smtp.yml
 parameters: []
 required_env_variables:
-  - SMTP_AWS_ACCESS_KEY_ID
-  - SMTP_AWS_SECRET_ACCESS_KEY
-  - SMTP_AWS_ZONE
-  - SMTP_AWS_DEFAULT_REGION
+  - AWS_ACCESS_KEY_ID
+  - AWS_SECRET_ACCESS_KEY
+  - AWS_ZONE
+  - AWS_DEFAULT_REGION
 env_config_mapping:
-  SMTP_AWS_ACCESS_KEY_ID: smtp.aws.access_key_id
-  SMTP_AWS_SECRET_ACCESS_KEY: smtp.aws.secret_access_key
-  SMTP_AWS_ZONE: smtp.aws.zone
-  SMTP_AWS_DEFAULT_REGION: smtp.aws.default_region
+  AWS_ACCESS_KEY_ID: aws.access_key_id
+  AWS_SECRET_ACCESS_KEY: aws.secret_access_key
+  AWS_ZONE: aws.zone
+  AWS_DEFAULT_REGION: aws.default_region
 

@@ -40,3 +40,4 @@ backend.tfvars
 .env.secrets
 *.brokerpak
 
+terraform/provision/.terraform.lock.hcl

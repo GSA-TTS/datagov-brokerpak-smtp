@@ -21,8 +21,11 @@ brokerpak concept, and to the Pivotal team running with the concept!
 
 Each brokered AWS SES instance provides:
 
-- SMTP credentials for use in sending mail from the domain
-- DNS records necessary for verifying domain ownership
+- If no domain is specified
+  - SMTP credentials for sending mail from an auto-generated subdomain (suitable for development)
+- If a domain is specified
+  - SMTP credentials for sending mail from the supplied domain
+  - DNS records necessary for verifying domain ownership (TXT and DKIM)
 
 ## Development Prerequisites
 

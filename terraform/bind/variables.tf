@@ -4,3 +4,11 @@ variable "instance_name" {
   type    = string
   default = ""
 }
+
+variable region { 
+  type = string 
+}
+
+variable domain_arn {
+  type = string
+}

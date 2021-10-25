@@ -7,10 +7,10 @@ data "aws_route53_zone" "parent_zone" {
 resource "aws_route53_zone" "instance_zone" {
   count = (var.domain == "" ? 1 : 0)
 
-  name = local.domain
+  name          = local.domain
   force_destroy = true
   tags = merge(var.labels, {
-    environment  = var.instance_name
+    environment = var.instance_name
     domain      = local.domain
   })
 }

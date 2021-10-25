@@ -8,6 +8,10 @@ output dkim_records {
     value = var.domain != "" ? local.dkim_records : null
 }
 
+output spf_records {
+    value = var.domain != "" ? local.spf_records : null
+}
+
 output instructions {
     value = local.instructions
 }

@@ -73,7 +73,7 @@ provision:
     details: AWS region for the SES instance
   - field_name: dkim_records
     type: object
-    details: If a domain was supplied DKIM records to be created
+    details: If a domain was supplied DKIM, records to be created
   - field_name: verification_record
     type: object
     details: If a domain was supplied, TXT record to be created
@@ -83,6 +83,9 @@ provision:
   - field_name: domain_arn
     type: string
     details: Instance SES domain identity (used when creating bindings)
+  - field_name: spf_records
+    type: object
+    details: If a domain was supplied, SPF records to be created
 bind:
   plan_inputs: []
   user_inputs:

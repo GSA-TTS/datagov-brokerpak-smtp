@@ -8,6 +8,10 @@ output dkim_records {
     value = var.domain != "" ? local.dkim_records : null
 }
 
+output email_reciept_error {
+    value = local.email_reciept_error
+}
+
 output instructions {
     value = local.instructions
 }

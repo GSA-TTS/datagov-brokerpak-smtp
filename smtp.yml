@@ -48,6 +48,10 @@ provision:
       type: string
       details: Domain to send mail from
       default: ""
+    - field_name: email_reciept_error
+      type: string
+      details: Email to recieve DMARC errors
+      default: "datagovhelp@gsa.gov"
   computed_inputs:
   - name: default_domain
     overwrite: true
@@ -77,6 +81,9 @@ provision:
   - field_name: verification_record
     type: object
     details: If a domain was supplied, TXT record to be created
+  - field_name: email_reciept_error
+    type: string
+    details: Email to recieve DMARC errors
   - field_name: instructions
     type: string
     details: Any further steps are needed before using the service.

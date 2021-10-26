@@ -1,0 +1,2 @@
+region="us-west-2"    # Region to host SMTP server in
+domain="example.com"  # Custom domain for user to configure on their own

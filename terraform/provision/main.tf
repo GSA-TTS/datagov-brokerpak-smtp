@@ -7,6 +7,12 @@ locals {
     ttl     = "600"
     records = [aws_ses_domain_identity.identity.verification_token]
   }
+  dmarc_verification_record = {
+    name    = "_dmarc.${local.domain}"
+    type    = "TXT"
+    ttl     = "600"
+    records = ["v=DMARC1; p=quarantine; rua=mailto:${var.email_reciept_error}; ruf=mailto:${var.email_reciept_error}"]
+  }
 
   dkim_records = null_resource.dkim_records.*.triggers
 
@@ -15,6 +21,7 @@ locals {
     {
       # Old-style (SES v1) TXT verification record
       txt_verification_record = local.txt_verification_record
+      dmarc_verification_record = local.dmarc_verification_record
     }
   )
 

@@ -39,17 +39,6 @@ resource "aws_route53_record" "records" {
   zone_id = aws_route53_zone.instance_zone[0].zone_id
 }
 
-#
-# DMARC TXT Record
-#
-resource "aws_route53_record" "txt_dmarc" {
-  zone_id = data.aws_route53_zone.parent_zone.zone_id
-  name    = "_dmarc.${local.domain}"
-  type    = "TXT"
-  ttl     = "600"
-  records = ["v=DMARC1; p=quarantine; rua=mailto:${var.email_reciept_error}; ruf=mailto:${var.email_reciept_error}"]
-}
-
 # Previously, we had to create CNAME records for these DKIM tokens, but now AWS
 # does that automatically when it's managing the same domain in Route53.
 # Leaving the code here for reference.

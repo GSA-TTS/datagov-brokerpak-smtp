@@ -7,13 +7,7 @@ locals {
     ttl     = "600"
     records = [aws_ses_domain_identity.identity.verification_token]
   }
-  # spf_1_verification_record = {
-  #   name    = aws_ses_domain_mail_from.spf.mail_from_domain
-  #   type    = "TXT"
-  #   ttl     = "600"
-  #   records = ["v=spf1 include:amazonses.com -all"]
-  # }
-  spf_2_verification_record = {
+  spf_verification_record = {
     name    = local.domain
     type    = "TXT"
     ttl     = "600"
@@ -27,9 +21,8 @@ locals {
   route53_records = (var.domain != "" ? {} :
     {
       # Old-style (SES v1) TXT verification record
-      txt_verification_record   = local.txt_verification_record
-      # spf_1_verification_record = local.spf_1_verification_record
-      spf_2_verification_record = local.spf_2_verification_record
+      txt_verification_record = local.txt_verification_record
+      spf_verification_record = local.spf_verification_record
     }
   )
 
@@ -44,14 +37,6 @@ resource "aws_ses_domain_identity" "identity" {
 resource "aws_ses_domain_dkim" "dkim" {
   domain = aws_ses_domain_identity.identity.domain
 }
-
-# resource "aws_ses_domain_mail_from" "spf" {
-#   domain = aws_ses_domain_identity.identity.domain
-# 
-#   # some ses resources don't allow for the terminating '.' in the domain name
-#   # so use a replace function to strip it out
-#   mail_from_domain = replace(local.domain, "/[.]$/", "")
-# }
 
 # We need to tell the caller about the three DKIM DNS records they must create.
 # There's no easy way to generate a nested structure in Terraform output, since
@@ -77,7 +62,6 @@ resource "null_resource" "spf_records" {
   count = 1
 
   triggers = {
-    # name    = [aws_ses_domain_mail_from.spf.mail_from_domain, local.domain][count.index]
     name    = local.domain
     type    = "TXT"
     ttl     = "600"

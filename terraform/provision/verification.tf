@@ -1,7 +1,7 @@
 # Get the configured default DNS Zone 
 data "aws_route53_zone" "parent_zone" {
   count = (var.domain == "" ? 1 : 0)
-  name = var.default_domain
+  name  = var.default_domain
 }
 
 # Create Hosted Zone for the specific subdomain name

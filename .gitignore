@@ -39,5 +39,7 @@ terraform.tfvars
 backend.tfvars
 .env.secrets
 *.brokerpak
+*.ash_history
+*.terraform.d/
 
 terraform/provision/.terraform.lock.hcl

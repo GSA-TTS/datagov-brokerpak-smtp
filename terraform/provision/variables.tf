@@ -1,13 +1,13 @@
 variable "domain" {
- type        = string
- description = "Domain from which to send mail"
- default     = ""
+  type        = string
+  description = "Domain from which to send mail"
+  default     = ""
 }
 
 variable "default_domain" {
- type        = string
- description = "Fallback domain to use if none was supplied"
- default     = "example.gov"
+  type        = string
+  description = "Fallback domain to use if none was supplied"
+  default     = "example.gov"
 }
 
 variable "instance_name" {
@@ -15,8 +15,8 @@ variable "instance_name" {
   default = ""
 }
 
-variable region { 
-  type = string 
+variable region {
+  type = string
 }
 
 variable email_reciept_error {

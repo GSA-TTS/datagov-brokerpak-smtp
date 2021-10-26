@@ -11,4 +11,4 @@ echo "Running tests on ${domain}..."
 checkdmarc $domain | jq --exit-status '.dmarc.valid'
 
 # Would use this to test and get if spf record is valid
-# checkdmarc $domain | jq --exit-status '.spf.valid'
+checkdmarc $domain | jq --exit-status '.spf.valid'

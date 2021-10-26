@@ -103,9 +103,9 @@ bind:
     overwrite: true
     type: string
   - name: instance_name
-    default: ${instance.name}
-    overwrite: true
+    required: true
     type: string
+    default: ${request.instance_id}
   template_refs:
     main: terraform/bind/main.tf
     outputs: terraform/bind/outputs.tf

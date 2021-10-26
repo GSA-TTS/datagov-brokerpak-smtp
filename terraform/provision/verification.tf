@@ -1,5 +1,6 @@
 # Get the configured default DNS Zone 
 data "aws_route53_zone" "parent_zone" {
+  count = (var.domain == "" ? 1 : 0)
   name = var.default_domain
 }
 
@@ -19,7 +20,7 @@ resource "aws_route53_zone" "instance_zone" {
 resource "aws_route53_record" "instance_ns" {
   count = (var.domain == "" ? 1 : 0)
 
-  zone_id = data.aws_route53_zone.parent_zone.zone_id
+  zone_id = data.aws_route53_zone.parent_zone[0].zone_id
   name    = local.instance_id
   type    = "NS"
   ttl     = "30"

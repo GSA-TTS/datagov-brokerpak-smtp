@@ -9,7 +9,7 @@ output dkim_records {
 }
 
 output email_reciept_error {
-    value = local.email_reciept_error
+    value = var.email_reciept_error
 }
 
 output instructions {

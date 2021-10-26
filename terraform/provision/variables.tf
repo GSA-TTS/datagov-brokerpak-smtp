@@ -19,6 +19,10 @@ variable region {
   type = string 
 }
 
+variable email_reciept_error {
+  type = string
+}
+
 variable "labels" {
   type    = map(any)
   default = {}

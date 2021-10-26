@@ -47,7 +47,7 @@ resource "aws_route53_record" "txt_dmarc" {
   name    = "_dmarc.${local.domain}"
   type    = "TXT"
   ttl     = "600"
-  records = ["v=DMARC1; p=quarantine; rua=mailto:${local.email_reciept_error}; ruf=mailto:${local.email_reciept_error}"]
+  records = ["v=DMARC1; p=quarantine; rua=mailto:${var.email_reciept_error}; ruf=mailto:${var.email_reciept_error}"]
 }
 
 # Previously, we had to create CNAME records for these DKIM tokens, but now AWS

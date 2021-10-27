@@ -12,6 +12,7 @@ locals {
     type    = "TXT"
     ttl     = "600"
     records = ["v=DMARC1; p=quarantine; rua=mailto:${var.email_reciept_error}; ruf=mailto:${var.email_reciept_error}"]
+  }
   spf_verification_record = {
     name    = local.domain
     type    = "TXT"

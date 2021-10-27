@@ -84,6 +84,6 @@ resource "null_resource" "dmarc_records" {
     name    = "_dmarc.${local.domain}"
     type    = "TXT"
     ttl     = "600"
-    records = ["v=DMARC1; p=quarantine; rua=mailto:${var.email_reciept_error}; ruf=mailto:${var.email_reciept_error}"]
+    records = "v=DMARC1; p=quarantine; rua=mailto:${var.email_reciept_error}; ruf=mailto:${var.email_reciept_error}"
   }
 }

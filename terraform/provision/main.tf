@@ -22,6 +22,7 @@ locals {
 
   dkim_records = null_resource.dkim_records.*.triggers
   spf_records  = null_resource.spf_records.*.triggers
+  dmarc_records  = null_resource.dmarc_records.*.triggers
 
   # If no domain was specified, we need to create the records ourselves
   route53_records = (var.domain != "" ? {} :
@@ -73,5 +74,16 @@ resource "null_resource" "spf_records" {
     type    = "TXT"
     ttl     = "600"
     records = "v=spf1 include:amazonses.com -all"
+  }
+}
+
+resource "null_resource" "dmarc_records" {
+  count = 1
+
+  triggers = {
+    name    = "_dmarc.${local.domain}"
+    type    = "TXT"
+    ttl     = "600"
+    records = ["v=DMARC1; p=quarantine; rua=mailto:${var.email_reciept_error}; ruf=mailto:${var.email_reciept_error}"]
   }
 }

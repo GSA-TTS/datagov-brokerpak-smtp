@@ -93,6 +93,9 @@ provision:
   - field_name: spf_records
     type: object
     details: If a domain was supplied, SPF records to be created
+  - field_name: dmarc_records
+    type: object
+    details: If a domain was supplied, DMARC record to be created
 bind:
   plan_inputs: []
   user_inputs:

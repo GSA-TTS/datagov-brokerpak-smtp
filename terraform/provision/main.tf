@@ -7,6 +7,12 @@ locals {
     ttl     = "600"
     records = [aws_ses_domain_identity.identity.verification_token]
   }
+  dmarc_verification_record = {
+    name    = "_dmarc.${local.domain}"
+    type    = "TXT"
+    ttl     = "600"
+    records = ["v=DMARC1; p=quarantine; rua=mailto:${var.email_reciept_error}; ruf=mailto:${var.email_reciept_error}"]
+  }
   spf_verification_record = {
     name    = local.domain
     type    = "TXT"
@@ -16,12 +22,14 @@ locals {
 
   dkim_records = null_resource.dkim_records.*.triggers
   spf_records  = null_resource.spf_records.*.triggers
+  dmarc_records  = null_resource.dmarc_records.*.triggers
 
   # If no domain was specified, we need to create the records ourselves
   route53_records = (var.domain != "" ? {} :
     {
       # Old-style (SES v1) TXT verification record
       txt_verification_record = local.txt_verification_record
+      dmarc_verification_record = local.dmarc_verification_record
       spf_verification_record = local.spf_verification_record
     }
   )
@@ -66,5 +74,16 @@ resource "null_resource" "spf_records" {
     type    = "TXT"
     ttl     = "600"
     records = "v=spf1 include:amazonses.com -all"
+  }
+}
+
+resource "null_resource" "dmarc_records" {
+  count = 1
+
+  triggers = {
+    name    = "_dmarc.${local.domain}"
+    type    = "TXT"
+    ttl     = "600"
+    records = "v=DMARC1; p=quarantine; rua=mailto:${var.email_reciept_error}; ruf=mailto:${var.email_reciept_error}"
   }
 }

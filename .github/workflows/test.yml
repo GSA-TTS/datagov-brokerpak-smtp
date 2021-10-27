@@ -27,6 +27,9 @@ jobs:
         echo "deb http://apt.starkandwayne.com stable main" | sudo tee /etc/apt/sources.list.d/starkandwayne.list
         sudo apt-get update
         sudo apt-get install eden
+    - name: Install checkdmarc
+      run: |
+        pip install checkdmarc
     - uses: actions/checkout@v2
       with: 
         fetch-depth: '0'

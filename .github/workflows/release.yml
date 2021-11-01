@@ -31,7 +31,7 @@ jobs:
       run: make build
 
     - name: Rename the brokerpak file based on the tag
-      run: mv smtp-services-pak-current.brokerpak smtp-services-pak-${GITHUB_REF#refs/*/}.brokerpak
+      run: mv datagov-brokerpak-smtp-current.brokerpak datagov-brokerpak-smtp-${GITHUB_REF#refs/*/}.brokerpak
 
     - name: Create a release and upload the files
       uses: ncipollo/release-action@v1

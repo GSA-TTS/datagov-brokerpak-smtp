@@ -24,7 +24,7 @@ INSTANCE_NAME ?= instance-$(USER)
 CLOUD_PROVISION_PARAMS="{}"
 CLOUD_BIND_PARAMS="{}"
 
-PREREQUISITES = docker jq eden
+PREREQUISITES = docker jq eden checkdmarc
 K := $(foreach prereq,$(PREREQUISITES),$(if $(shell which $(prereq)),some string,$(error "Missing prerequisite commands $(prereq)")))
 
 check:

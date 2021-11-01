@@ -40,6 +40,7 @@ building, serving, and testing the brokerpak.
 
 1. `make` is used for executing docker commands in a meaningful build cycle. 
 1. [`eden`](https://github.com/starkandwayne/eden) is used as a client for testing the brokerpak
+1. [`checkdmarc`](https://pypi.org/project/checkdmarc/) is used to verify the DMARC and SPF configuration of configured instances
 1. AWS account credentials (as environment variables) are used for actual
    service provisioning. The corresponding user must have at least the permissions described in `permission-policies.tf`. Set at least these variables:
 

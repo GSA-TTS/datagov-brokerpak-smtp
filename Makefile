@@ -24,7 +24,7 @@ INSTANCE_NAME ?= instance-$(USER)
 CLOUD_PROVISION_PARAMS="{}"
 CLOUD_BIND_PARAMS="{}"
 
-PREREQUISITES = docker jq eden
+PREREQUISITES = docker jq eden checkdmarc
 K := $(foreach prereq,$(PREREQUISITES),$(if $(shell which $(prereq)),some string,$(error "Missing prerequisite commands $(prereq)")))
 
 check:
@@ -61,8 +61,7 @@ up: ## Run the broker service with the brokerpak configured. The broker listens 
 	-d \
 	--rm \
 	$(CSB) serve
-	@while [ "`docker inspect -f {{.State.Health.Status}} csb-service-$(SERVICE_NAME)`" != "healthy" ]; do   echo "Waiting for csb-service to be ready..." ; sleep 2; done
-	@echo "csb-service is ready!" ; echo ""
+	@./bin/docker-wait.sh csb-service-$(SERVICE_NAME)
 	@docker ps -l
 
 down: .env.secrets ## Bring the cloud-service-broker service down

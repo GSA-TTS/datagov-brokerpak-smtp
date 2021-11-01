@@ -16,8 +16,8 @@ output dmarc_records {
   value = var.domain != "" ? local.dmarc_records : null
 }
 
-output email_reciept_error {
-    value = var.email_reciept_error
+output email_receipt_error {
+    value = var.email_receipt_error
 }
 
 output instructions {

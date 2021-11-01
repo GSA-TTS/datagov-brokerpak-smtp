@@ -12,14 +12,13 @@ variable "default_domain" {
 
 variable "instance_name" {
   type    = string
-  default = ""
 }
 
-variable region {
+variable "region" {
   type = string
 }
 
-variable email_reciept_error {
+variable "email_receipt_error" {
   type = string
 }
 

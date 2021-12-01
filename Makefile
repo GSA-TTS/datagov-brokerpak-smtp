@@ -21,13 +21,14 @@ PLAN_NAME=base
 # invocations, and make it obvious which resources correspond to which CI run.
 INSTANCE_NAME ?= instance-$(USER)
 
-CLOUD_PROVISION_PARAMS="{}"
+CLOUD_PROVISION_PARAMS={"domain": "data.gov"}
+# CLOUD_PROVISION_PARAMS={}
 CLOUD_BIND_PARAMS="{}"
 
 PREREQUISITES = docker jq eden checkdmarc
 K := $(foreach prereq,$(PREREQUISITES),$(if $(shell which $(prereq)),some string,$(error "Missing prerequisite commands $(prereq)")))
 
-check:
+check: ## Output variables for sanity-checking
 	@echo EDEN_EXEC: $(EDEN_EXEC)
 	@echo SERVICE_NAME: $(SERVICE_NAME)
 	@echo PLAN_NAME: $(PLAN_NAME)
@@ -76,6 +77,9 @@ test: demo-up demo-run demo-down ## Execute the brokerpak examples against the r
 demo-up: ## Provision an SMTP instance and output the bound credentials
 	@$(EDEN_EXEC) provision -i ${INSTANCE_NAME} -s ${SERVICE_NAME}  -p ${PLAN_NAME} -P '$(CLOUD_PROVISION_PARAMS)'
 	@$(EDEN_EXEC) bind -b binding -i ${INSTANCE_NAME}
+
+demo-showcreds: ## Show the bound credentials
+	@$(EDEN_EXEC) credentials -b binding -i ${INSTANCE_NAME}
 
 demo-run: ## Run tests on the demo instance
 	INSTANCE_NAME=${INSTANCE_NAME} ./test.sh

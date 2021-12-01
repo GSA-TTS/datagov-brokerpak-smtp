@@ -40,22 +40,6 @@ resource "aws_route53_record" "records" {
   zone_id = aws_route53_zone.instance_zone[0].zone_id
 }
 
-# AWS is supposed to handle the creation of DKIM records to the domain
-# if using Route53; however it does not seem to be applied appropriately.
-
-resource "aws_route53_record" "dkim" {
-  count = (var.domain == "" ? 3 : 0)
-  
-  zone_id = aws_route53_zone.instance_zone[0].zone_id
-  name = format(
-    "%s._domainkey.%s",
-    element(aws_ses_domain_dkim.dkim.dkim_tokens, count.index),
-    local.domain,
-  )
-  type    = "CNAME"
-  ttl     = "600"
-  records = ["${element(aws_ses_domain_dkim.dkim.dkim_tokens, count.index)}.dkim.amazonses.com"]
-}
 
 # Wait on the verification to succeed
 resource "aws_ses_domain_identity_verification" "verification" {

@@ -1,12 +1,12 @@
 # Get the configured default DNS Zone 
 data "aws_route53_zone" "parent_zone" {
-  count = (var.domain == "" ? 1 : 0)
+  count = (local.manage_domain ? 1 : 0)
   name  = var.default_domain
 }
 
 # Create Hosted Zone for the specific subdomain name
 resource "aws_route53_zone" "instance_zone" {
-  count = (var.domain == "" ? 1 : 0)
+  count = (local.manage_domain ? 1 : 0)
 
   name          = local.domain
   force_destroy = true
@@ -18,7 +18,7 @@ resource "aws_route53_zone" "instance_zone" {
 
 # Create the NS record in the parent zone for the instance zone
 resource "aws_route53_record" "instance_ns" {
-  count = (var.domain == "" ? 1 : 0)
+  count = (local.manage_domain ? 1 : 0)
 
   zone_id = data.aws_route53_zone.parent_zone[0].zone_id
   name    = local.instance_id
@@ -43,7 +43,7 @@ resource "aws_route53_record" "records" {
 
 # Wait on the verification to succeed
 resource "aws_ses_domain_identity_verification" "verification" {
-  count = (var.domain == "" ? 1 : 0)
+  count = (local.manage_domain ? 1 : 0)
 
   domain = local.domain
   timeouts {

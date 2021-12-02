@@ -1,18 +1,22 @@
 locals {
   instance_id = "ses-${substr(sha256(var.instance_name), 0, 16)}"
-  domain      = (var.domain != "" ? var.domain : "${local.instance_id}.${var.default_domain}")
+
+  manage_domain = (var.domain == "" ? true : false)
+  domain      = (local.manage_domain ? "${local.instance_id}.${var.default_domain}" : var.domain)
   txt_verification_record = {
     name    = "_amazonses"
     type    = "TXT"
     ttl     = "600"
     records = [aws_ses_domain_identity.identity.verification_token]
   }
+
   dmarc_verification_record = {
     name    = "_dmarc.${local.domain}"
     type    = "TXT"
     ttl     = "600"
     records = ["v=DMARC1; p=quarantine; rua=mailto:${var.email_receipt_error}; ruf=mailto:${var.email_receipt_error}"]
   }
+
   spf_verification_record = {
     name    = local.domain
     type    = "TXT"
@@ -55,8 +59,7 @@ locals {
   # create the records ourselves
   route53_records = (var.domain != "" ? {} : local.required_records)
 
-  instructions = (var.domain != "" ? "Your SMTP service was provisioned, but is not yet verified. To verify your control of the ${var.domain} domain, create the 'required_records' provided here in the ${var.domain} zone before using the service." :
-  null)
+  instructions = (local.manage_domain ? null : "Your SMTP service was provisioned, but is not yet verified. To verify your control of the ${var.domain} domain, create the 'required_records' provided here in the ${var.domain} zone before using the service.")
 }
 
 resource "aws_ses_domain_identity" "identity" {

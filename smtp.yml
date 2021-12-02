@@ -44,7 +44,7 @@ provision:
         eu-north-1 : eu-north-1
         me-south-1 : me-south-1
         sa-east-1 : sa-east-1
-    - field_name: domain
+    - field_name: domain_from
       type: string
       details: Domain to send mail from
       default: ""

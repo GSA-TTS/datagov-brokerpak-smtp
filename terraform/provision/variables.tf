@@ -1,4 +1,4 @@
-variable "domain" {
+variable "domain_from" {
   type        = string
   description = "Domain from which to send mail"
   default     = ""

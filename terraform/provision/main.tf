@@ -57,7 +57,18 @@ locals {
 
   # If no domain was specified, we manage the generated domain and need to
   # create the records ourselves
-  route53_records = (var.domain != "" ? {} : local.required_records)
+  required_records_flatter = {
+    for key, value in local.required_records : 
+    key => {
+      id = key
+      name = value.name
+      type = value.type
+      ttl = value.ttl
+      record = value.records[0]
+    }
+  }
+
+  route53_records = (local.manage_domain ? local.required_records_flatter : {})
 
   instructions = (local.manage_domain ? null : "Your SMTP service was provisioned, but is not yet verified. To verify your control of the ${var.domain} domain, create the 'required_records' provided here in the ${var.domain} zone before using the service.")
 }

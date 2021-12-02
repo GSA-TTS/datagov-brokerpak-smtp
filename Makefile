@@ -21,8 +21,7 @@ PLAN_NAME=base
 # invocations, and make it obvious which resources correspond to which CI run.
 INSTANCE_NAME ?= instance-$(USER)
 
-CLOUD_PROVISION_PARAMS={"domain": "data.gov"}
-# CLOUD_PROVISION_PARAMS={}
+CLOUD_PROVISION_PARAMS={}
 CLOUD_BIND_PARAMS="{}"
 
 PREREQUISITES = docker jq eden checkdmarc

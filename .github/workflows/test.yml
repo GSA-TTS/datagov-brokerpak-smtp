@@ -52,8 +52,11 @@ jobs:
         INSTANCE_NAME="$(echo ci-${{ github.event.pull_request.number }}-${GITHUB_RUN_ID})"
         echo "INSTANCE_NAME=${INSTANCE_NAME}" | tee -a $GITHUB_ENV
 
-    - name: Run examples (tests)
+    - name: Run examples (tests if NO domain is supplied)
       run: make up && make test && make down
+
+    - name: Run examples (tests if a domain IS supplied)
+      run: make up && make test-supplied && make down
 
     - name: Clean up if there was a failure
       if: ${{ failure() }}

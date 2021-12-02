@@ -1,8 +1,8 @@
 locals {
   instance_id = "ses-${substr(sha256(var.instance_name), 0, 16)}"
 
-  manage_domain = (var.domain_from == "" ? true : false)
-  domain      = (local.manage_domain ? "${local.instance_id}.${var.default_domain}" : var.domain_from)
+  manage_domain = (var.domain == "" ? true : false)
+  domain      = (local.manage_domain ? "${local.instance_id}.${var.default_domain}" : var.domain)
   txt_verification_record = {
     name    = "_amazonses"
     type    = "TXT"
@@ -70,7 +70,7 @@ locals {
 
   route53_records = (local.manage_domain ? local.required_records_flatter : {})
 
-  instructions = (local.manage_domain ? null : "Your SMTP service was provisioned, but is not yet verified. To verify your control of the ${var.domain_from} domain, create the 'required_records' provided here in the ${var.domain_from} zone before using the service.")
+  instructions = (local.manage_domain ? null : "Your SMTP service was provisioned, but is not yet verified. To verify your control of the ${var.domain} domain, create the 'required_records' provided here in the ${var.domain} zone before using the service.")
 }
 
 resource "aws_ses_domain_identity" "identity" {

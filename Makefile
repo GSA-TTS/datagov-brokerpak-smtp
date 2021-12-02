@@ -21,7 +21,6 @@ PLAN_NAME=base
 # invocations, and make it obvious which resources correspond to which CI run.
 INSTANCE_NAME ?= instance-$(USER)
 
-CLOUD_PROVISION_PARAMS={}
 CLOUD_BIND_PARAMS="{}"
 
 PREREQUISITES = docker jq eden checkdmarc
@@ -73,13 +72,20 @@ down: .env.secrets ## Bring the cloud-service-broker service down
 # "demo-down" targets.
 test: demo-up demo-run demo-down ## Execute the brokerpak examples against the running broker
 
+test-supplied: demo-up-supplied demo-run demo-down ## Execute the brokerpak examples against the running broker
+
 demo-up: ## Provision an SMTP instance and output the bound credentials
-	@$(EDEN_EXEC) provision -i ${INSTANCE_NAME} -s ${SERVICE_NAME}  -p ${PLAN_NAME} -P '$(CLOUD_PROVISION_PARAMS)'
+	@$(EDEN_EXEC) provision -i ${INSTANCE_NAME} -s ${SERVICE_NAME}  -p ${PLAN_NAME} -P '{}'
+	@$(EDEN_EXEC) bind -b binding -i ${INSTANCE_NAME}
+
+demo-up-supplied: ## Provision an SMTP instance and output the bound credentials
+	@$(EDEN_EXEC) provision -i ${INSTANCE_NAME} -s ${SERVICE_NAME}  -p ${PLAN_NAME} -P '"{ \"domain_from\": \"test.com\" }"'
 	@$(EDEN_EXEC) bind -b binding -i ${INSTANCE_NAME}
 
 demo-showcreds: ## Show the bound credentials
 	@$(EDEN_EXEC) credentials -b binding -i ${INSTANCE_NAME}
 
+demo-run: SHELL:=/bin/bash
 demo-run: ## Run tests on the demo instance
 	INSTANCE_NAME=${INSTANCE_NAME} ./test.sh
 

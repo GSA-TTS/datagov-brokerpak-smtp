@@ -1,7 +1,7 @@
 output region { value = var.region }
 
 output required_records {
-  value = var.domain != "" ? jsonencode(local.required_records) : null
+  value = var.domain != "" ? local.required_records_as_string : null
 }
 
 output email_receipt_error {

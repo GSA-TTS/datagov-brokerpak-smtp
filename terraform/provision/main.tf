@@ -20,7 +20,6 @@ locals {
     records = ["v=spf1 include:amazonses.com -all"]
   }
 
-
   dkim_records = [ for i, token in aws_ses_domain_dkim.dkim.dkim_tokens : 
     {
       name = "${token}._domainkey.${local.domain}"
@@ -38,6 +37,19 @@ locals {
     dkim_record_1 = local.dkim_records[1]
     dkim_record_2 = local.dkim_records[2]
   }
+
+  # Generate string output usable for pasting into HCL elsewhere if needed
+  required_records_as_string = <<-EOT
+
+  {%{ for key, value in local.required_records }
+    ${key} = {
+      name    = "${value.name}"
+      type    = "${value.type}"
+      ttl     = "${value.ttl}"
+      records = [%{ for record in value.records }"${record}"%{ endfor ~}] 
+    } %{ endfor }
+  }
+  EOT 
 
   # If no domain was specified, we manage the generated domain and need to
   # create the records ourselves

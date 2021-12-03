@@ -75,12 +75,9 @@ provision:
   - field_name: region
     type: string
     details: AWS region for the SES instance
-  - field_name: dkim_records
+  - field_name: required_records
     type: object
-    details: If a domain was supplied DKIM, records to be created
-  - field_name: verification_record
-    type: object
-    details: If a domain was supplied, TXT record to be created
+    details: If a domain was supplied, the records to be created in that zone
   - field_name: email_receipt_error
     type: string
     details: Email to recieve DMARC errors
@@ -90,12 +87,6 @@ provision:
   - field_name: domain_arn
     type: string
     details: Instance SES domain identity (used when creating bindings)
-  - field_name: spf_records
-    type: object
-    details: If a domain was supplied, SPF records to be created
-  - field_name: dmarc_records
-    type: object
-    details: If a domain was supplied, DMARC record to be created
 bind:
   plan_inputs: []
   user_inputs:

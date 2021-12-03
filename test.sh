@@ -8,10 +8,21 @@ domain=`$SERVICE_INFO | jq -r '.domain_arn | split("/")[1]'`
 
 echo "Running tests on ${domain}..."
 
-echo "Is dmarc valid?"
-checkdmarc $domain | jq '.dmarc'
-checkdmarc $domain | jq --exit-status '.dmarc.valid'
+if [ "$domain" = "test.com" ]; then
+  export output=`$SERVICE_INFO | jq '. | select(.required_records != null)'`
+  if [ -z "$output" ]; then
+    echo "Failed"
+  else
+    echo "Records outputted successfully"
+  fi
+else
 
-echo "Is spf valid?"
-checkdmarc $domain | jq '.spf'
-checkdmarc $domain | jq --exit-status '.spf.valid'
+  echo "Is dmarc valid?"
+  checkdmarc $domain | jq '.dmarc'
+  checkdmarc $domain | jq --exit-status '.dmarc.valid'
+
+  echo "Is spf valid?"
+  checkdmarc $domain | jq '.spf'
+  checkdmarc $domain | jq --exit-status '.spf.valid'
+
+fi

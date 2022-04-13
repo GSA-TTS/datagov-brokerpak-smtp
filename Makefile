@@ -108,7 +108,6 @@ demo-up: ## Provision an SMTP instance and output the bound credentials
 	$(CSB_INSTANCE_WAIT) ${INSTANCE_NAME} ;\
 	echo "Binding ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding1" ;\
 	$(CSB_EXEC) client bind      --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} --bindingid binding1 --params $(CLOUD_BIND_PARAMS) | jq -r .response > ${INSTANCE_NAME}.binding.json ;\
-	# $(CSB_BINDING_FETCH) ${INSTANCE_NAME} binding ;\
 	)
 
 demo-up-supplied: ## Provision an SMTP instance and output the bound credentials
@@ -116,10 +115,10 @@ demo-up-supplied: ## Provision an SMTP instance and output the bound credentials
 	set -e ;\
 	eval "$$( $(CSB_SET_IDS) )" ;\
 	echo "Provisioning ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}" ;\
-	$(CSB_EXEC) client provision --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME}                     --params '"{ \"domain_from\": \"test.com\" }"' 2>&1 > /dev/null ;\
+	$(CSB_EXEC) client provision --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME}                       --params '{ "domain": "test.com" }' 2>&1 > /dev/null ;\
 	$(CSB_INSTANCE_WAIT) ${INSTANCE_NAME} ;\
-	echo "Binding ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding1" ;\
-	$(CSB_EXEC) client bind      --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} --bindingid binding1 --params $(CLOUD_BIND_PARAMS) | jq -r .response > ${INSTANCE_NAME}.binding.json ;\
+	echo "Binding ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding2" ;\
+	$(CSB_EXEC) client bind      --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} --bindingid binding2 --params '{}' | jq -r .response > ${INSTANCE_NAME}.binding.json ;\
 	)
 
 demo-showcreds: ## Show the bound credentials
@@ -130,7 +129,7 @@ demo-run: ## Run tests on the demo instance
 	@( \
 	set -e ;\
 	eval "$$( $(CSB_SET_IDS) )" ;\
-	echo "Testing ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding1" ;\
+	echo "Testing ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:bindingX" ;\
 	./test.sh ${INSTANCE_NAME}.binding.json ;\
 	)
 
@@ -141,6 +140,8 @@ demo-down: ## Clean up data left over from tests and demos
 	eval "$$( $(CSB_SET_IDS) )" ;\
 	echo "Unbinding ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding1" ;\
 	$(CSB_EXEC) client unbind      --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} --bindingid binding1 2>&1 > /dev/null || true ;\
+	echo "Unbinding ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding2" ;\
+	$(CSB_EXEC) client unbind      --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} --bindingid binding2 2>&1 > /dev/null || true ;\
 	echo "Deprovisioning ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}" ;\
 	$(CSB_EXEC) client deprovision   --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} 2>&1 > /dev/null || true ;\
 	$(CSB_INSTANCE_WAIT) ${INSTANCE_NAME} || true;\

@@ -21,7 +21,7 @@ domain=`echo $SERVICE_INFO | jq -r '.domain_arn | split("/")[1]'`
 echo "Running tests on ${domain}..."
 
 if [ "$domain" = "test.com" ]; then
-  export output=`$SERVICE_INFO | jq '. | select(.required_records != null)'`
+  export output=`echo $SERVICE_INFO | jq '. | select(.required_records != null)'`
   if [ -z "$output" ]; then
     echo "Failed"
   else

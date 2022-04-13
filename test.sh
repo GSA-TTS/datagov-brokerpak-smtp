@@ -1,10 +1,22 @@
 #!/bin/bash
 
+# Test that a provisioned instance is set up properly and meets requirements
+#   ./test.sh BINDINGINFO.json
+#
+# Returns 0 (if all tests PASS)
+#      or 1 (if any test FAILs).
+
 set -e
+retval=0
 
-export SERVICE_INFO=$(echo "eden --client user --client-secret pass --url http://127.0.0.1:8080 credentials -b binding -i ${INSTANCE_NAME:-instance-${USER}}")
+if [[ -z ${1+x} ]] ; then
+    echo "Usage: ./test.sh BINDINGINFO.json"
+    exit 1
+fi
 
-domain=`$SERVICE_INFO | jq -r '.domain_arn | split("/")[1]'`
+SERVICE_INFO="$(jq -r .credentials < "$1")"
+
+domain=`echo $SERVICE_INFO | jq -r '.domain_arn | split("/")[1]'`
 
 echo "Running tests on ${domain}..."
 

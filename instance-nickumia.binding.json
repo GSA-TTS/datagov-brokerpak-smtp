@@ -1,0 +1,10 @@
+{
+  "credentials": {
+    "domain_arn": "arn:aws:ses:us-west-2:645945852371:identity/ses-cbc2c1def2423951.ssb-dev.data.gov",
+    "email_receipt_error": "datagovhelp@gsa.gov",
+    "region": "us-west-2",
+    "smtp_password": "BMF+TC+6BtlJe6kK2zY20Bdz07EdlgsP9qfPQ8t6Mj28",
+    "smtp_server": "email-smtp.us-west-2.amazonaws.com",
+    "smtp_user": "AKIAZMZK7QHJRNNI5NUI"
+  }
+}

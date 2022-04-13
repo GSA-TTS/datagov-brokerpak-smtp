@@ -96,6 +96,8 @@ brokerpak](https://github.com/pivotal/cloud-service-broker/blob/master/docs/brok
 will be invoked for end-to-end testing of the brokerpak's service offerings.
 
 You can also manually interact with the broker using the `cloud-service-broker` CLI,
+![image](https://user-images.githubusercontent.com/85196563/163099919-656fcb63-d6d1-4190-a023-48697a34906d.png)
+
 
 ### Shutting the brokerpak down
 

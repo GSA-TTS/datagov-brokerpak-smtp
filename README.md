@@ -38,8 +38,7 @@ building, serving, and testing the brokerpak.
    (We are working on making the necessary container image publicly accessible;
    this step should not be necessary in future.)
 
-1. `make` is used for executing docker commands in a meaningful build cycle. 
-1. [`eden`](https://github.com/starkandwayne/eden) is used as a client for testing the brokerpak
+1. `make` is used for executing docker commands in a meaningful build cycle.
 1. [`checkdmarc`](https://pypi.org/project/checkdmarc/) is used to verify the DMARC and SPF configuration of configured instances
 1. AWS account credentials (as environment variables) are used for actual
    service provisioning. The corresponding user must have at least the permissions described in `permission-policies.tf`. Set at least these variables:
@@ -49,7 +48,7 @@ building, serving, and testing the brokerpak.
     - AWS_DEFAULT_REGION
 
 
-## Developing the brokerpak 
+## Developing the brokerpak
 Run the `make` command by itself for information on the various targets that are available. Notable targets are described below
 
 ```
@@ -87,7 +86,7 @@ by visiting [`http://127.0.0.1:8080/docs`](http://127.0.0.1:8080/docs) in your b
 
 ### Testing the brokerpak (while it's running)
 
-Run 
+Run
 ```
 make test
 ```
@@ -96,11 +95,13 @@ The [examples specified by the
 brokerpak](https://github.com/pivotal/cloud-service-broker/blob/master/docs/brokerpak-specification.md#service-yaml-flie)
 will be invoked for end-to-end testing of the brokerpak's service offerings.
 
-You can also manually interact with the broker using the [`eden` OSBAPI client](https://github.com/starkandwayne/eden)
+You can also manually interact with the broker using the `cloud-service-broker` CLI,
+![image](https://user-images.githubusercontent.com/85196563/163099919-656fcb63-d6d1-4190-a023-48697a34906d.png)
+
 
 ### Shutting the brokerpak down
 
-Run 
+Run
 
 ```
 make down
@@ -110,7 +111,7 @@ The broker will be stopped.
 
 ### Cleaning out the current state
 
-Run 
+Run
 ```
 make clean
 ```
@@ -122,7 +123,7 @@ Check
 out the list of [open issues](https://github.com/GSA/eks-brokerpak/issues) for
 areas where you can contribute.
 
-See [CONTRIBUTING](CONTRIBUTING.md) for additional information. 
+See [CONTRIBUTING](CONTRIBUTING.md) for additional information.
 
 ## Public domain
 

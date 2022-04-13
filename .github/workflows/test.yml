@@ -1,4 +1,4 @@
-# On pull request events, this workflow will run `make test`. 
+# On pull request events, this workflow will run `make test`.
 name: 'Test'
 
 on:
@@ -21,17 +21,11 @@ jobs:
 
     # Checkout the repository to the GitHub Actions runner
     steps:
-    - name: Install the eden OSBAPI CLI tool
-      run: |
-        wget -q -O - https://raw.githubusercontent.com/starkandwayne/homebrew-cf/master/public.key | sudo apt-key add -
-        echo "deb http://apt.starkandwayne.com stable main" | sudo tee /etc/apt/sources.list.d/starkandwayne.list
-        sudo apt-get update
-        sudo apt-get install eden
     - name: Install checkdmarc
       run: |
         pip install checkdmarc
     - uses: actions/checkout@v2
-      with: 
+      with:
         fetch-depth: '0'
 
     - name: Supply an empty .env.secrets file
@@ -44,16 +38,21 @@ jobs:
     - name: Build
       run: make build
 
-    - name: Set the instance name for subsequent steps
+    - name: Set the instance name for subsequent steps (Test 1)
       # Use an instance name that corresponds to this particular branch+run.
       # Docs for this method:
       # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable
       run: |
-        INSTANCE_NAME="$(echo ci-${{ github.event.pull_request.number }}-${GITHUB_RUN_ID})"
+        INSTANCE_NAME="$(echo ci-test1-${{ github.event.pull_request.number }}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT})"
         echo "INSTANCE_NAME=${INSTANCE_NAME}" | tee -a $GITHUB_ENV
 
     - name: Run examples (tests if NO domain is supplied)
       run: make up && make test && make down
+
+    - name: Set the instance name for subsequent steps (Test 2)
+      run: |
+        INSTANCE_NAME="$(echo ci-test2-${{ github.event.pull_request.number }}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT})"
+        echo "INSTANCE_NAME=${INSTANCE_NAME}" | tee -a $GITHUB_ENV
 
     - name: Run examples (tests if a domain IS supplied)
       run: make up && make test-supplied && make down

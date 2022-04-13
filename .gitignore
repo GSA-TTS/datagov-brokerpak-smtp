@@ -43,3 +43,4 @@ backend.tfvars
 *.terraform.d/
 
 terraform/provision/.terraform.lock.hcl
+*.binding.json

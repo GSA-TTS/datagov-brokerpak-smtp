@@ -4,7 +4,7 @@ import emails
 import json
 import sys
 
-if len(sys.argv) < 2:
+if len(sys.argv) < 3:
     print(("Usage: "
            "python send_email.py <email_credentials_json> <recipient_email>"))
     sys.exit(1)

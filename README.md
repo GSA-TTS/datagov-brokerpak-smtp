@@ -126,6 +126,7 @@ make [clean build] up
 ```
 Run the `send_email.py` script to send an email from the newly created SES service,
 ```
+# pip install emails
 python send_email.py <instance_name.binding.json> <email_recipient>
 ```
 

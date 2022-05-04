@@ -27,7 +27,7 @@ resource "aws_iam_user_policy" "user_policy" {
         "ses:SendEmail",
         "ses:SendRawEmail"
       ],
-      "Resource": "${var.domain_arn}"
+      "Resource": "*"
     }
   ]
 }

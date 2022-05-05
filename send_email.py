@@ -10,18 +10,18 @@ if len(sys.argv) < 3:
     sys.exit(1)
 
 
+# Gather email settings
+credentials = open(sys.argv[1], "r")
+settings = json.load(credentials)
+credentials.close()
+
 # Prepare the email
 message = emails.html(
     html=("<h1>My message</h1><strong>I can reach you to tell you important "
           "data.gov news!</strong>"),
     subject="ATTN: Hello data.gov world",
-    mail_from="test@ses-cbc2c1def2423951.ssb-dev.data.gov",
+    mail_from="test@%s" % (settings["credentials"]["domain_arn"].split("/")[-1]),
 )
-
-# Gather email settings
-credentials = open(sys.argv[1], "r")
-settings = json.load(credentials)
-credentials.close()
 
 # Send the email
 r = message.send(

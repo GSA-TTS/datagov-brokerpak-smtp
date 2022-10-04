@@ -118,10 +118,13 @@ bind:
     details: SMTP server
   - field_name: smtp_user
     type: string
-    details: SMTP user
+    details: SMTP user and AWS Access Key ID
   - field_name: smtp_password
     type: string
     details: SMTP password
+  - field_name: secret_access_key
+    type: string
+    details: AWS Secret Access Key
 examples:
 - name: smtp
   description: SMTP base

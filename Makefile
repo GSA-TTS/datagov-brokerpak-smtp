@@ -115,7 +115,7 @@ demo-up-supplied: ## Provision an SMTP instance and output the bound credentials
 	set -e ;\
 	eval "$$( $(CSB_SET_IDS) )" ;\
 	echo "Provisioning ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}" ;\
-	$(CSB_EXEC) client provision --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME}                       --params '{ "domain": "test.com" }' 2>&1 > /dev/null ;\
+	$(CSB_EXEC) client provision --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME}                       --params '{ "domain": "test.com", "create_sns_topics": true }' 2>&1 > /dev/null ;\
 	$(CSB_INSTANCE_WAIT) ${INSTANCE_NAME} ;\
 	echo "Binding ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding2" ;\
 	$(CSB_EXEC) client bind      --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} --bindingid binding2 --params '{}' | jq -r .response > ${INSTANCE_NAME}.binding.json ;\
@@ -159,4 +159,3 @@ all: clean build up test down ## Clean and rebuild, then bring up the server, ru
 .PHONY: help
 help: ## This help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-10s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
-

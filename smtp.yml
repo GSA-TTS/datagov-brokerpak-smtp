@@ -52,21 +52,10 @@ provision:
       type: string
       details: Email to recieve DMARC errors
       default: "datagovhelp@gsa.gov"
-    - field_name: create_sns_topics
+    - field_name: enable_feedback_notifications
       type: boolean
       details: Flag to toggle creation of SNS topics for feedback notifications
-      default: false
-    - field_name: notifications_bounce_topic_arn
-      type: string
-      details: ARN for an SNS topic to connect to bounce feedback notifications
-      default: ""
-    - field_name: notifications_complaint_topic_arn
-      type: string
-      details: ARN for an SNS topic to connect to complaint feedback notifications
-      default: ""
-    - field_name: notifications_delivery_topic_arn
-      type: string
-      details: ARN for an SNS topic to connect to delivery feedback notifications
+      default: true
   computed_inputs:
   - name: default_domain
     overwrite: true

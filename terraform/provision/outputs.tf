@@ -17,13 +17,13 @@ output "domain_arn" {
 }
 
 output "bounce_topic_arn" {
-  value = (local.bounce_topic_sns_arn == "" ? null : local.bounce_topic_sns_arn)
+  value = local.bounce_topic_sns_arn
 }
 
 output "complaint_topic_arn" {
-  value = (local.complaint_topic_sns_arn == "" ? null : local.complaint_topic_sns_arn)
+  value = local.complaint_topic_sns_arn
 }
 
 output "delivery_topic_arn" {
-  value = (local.delivery_topic_sns_arn == "" ? null : local.delivery_topic_sns_arn)
+  value = local.delivery_topic_sns_arn
 }

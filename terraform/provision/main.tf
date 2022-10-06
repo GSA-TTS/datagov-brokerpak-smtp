@@ -71,12 +71,9 @@ locals {
   route53_records = (local.manage_domain ? local.required_records_flatter : {})
 
   # SNS topic locals
-  create_bounce_notification    = (var.create_sns_topics || var.notifications_bounce_topic_arn != "")
-  bounce_topic_sns_arn          = (var.create_sns_topics ? aws_sns_topic.bounce_topic[0].arn : var.notifications_bounce_topic_arn)
-  create_complaint_notification = (var.create_sns_topics || var.notifications_complaint_topic_arn != "")
-  complaint_topic_sns_arn       = (var.create_sns_topics ? aws_sns_topic.complaint_topic[0].arn : var.notifications_complaint_topic_arn)
-  create_delivery_notification  = (var.create_sns_topics || var.notifications_delivery_topic_arn != "")
-  delivery_topic_sns_arn        = (var.create_sns_topics ? aws_sns_topic.delivery_topic[0].arn : var.notifications_delivery_topic_arn)
+  bounce_topic_sns_arn    = (var.enable_feedback_notifications ? aws_sns_topic.bounce_topic[0].arn : "")
+  complaint_topic_sns_arn = (var.enable_feedback_notifications ? aws_sns_topic.complaint_topic[0].arn : "")
+  delivery_topic_sns_arn  = (var.enable_feedback_notifications ? aws_sns_topic.delivery_topic[0].arn : "")
 
   instructions = (local.manage_domain ? null : "Your SMTP service was provisioned, but is not yet verified. To verify your control of the ${var.domain} domain, create the 'required_records' provided here in the ${var.domain} zone before using the service.")
 }

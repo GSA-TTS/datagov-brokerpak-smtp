@@ -11,7 +11,7 @@ variable "default_domain" {
 }
 
 variable "instance_name" {
-  type    = string
+  type = string
 }
 
 variable "region" {
@@ -28,25 +28,25 @@ variable "labels" {
 }
 
 variable "create_sns_topics" {
-  type = bool
+  type        = bool
   description = "Toggle whether to create SNS topics for feedback notifications"
-  default = false
+  default     = false
 }
 
 variable "notifications_bounce_topic_arn" {
-  type = string
+  type        = string
   description = "ARN of an SNS topic to subscribe bounce messages to"
-  default = ""
+  default     = ""
 }
 
 variable "notifications_complaint_topic_arn" {
-  type = string
+  type        = string
   description = "ARN of an SNS topic to subscribe complaint messages to"
-  default = ""
+  default     = ""
 }
 
 variable "notifications_delivery_topic_arn" {
-  type = string
+  type        = string
   description = "ARN of an SNS topic to subscribe delivery messages to"
-  default = ""
+  default     = ""
 }

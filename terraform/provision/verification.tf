@@ -35,7 +35,7 @@ resource "aws_route53_record" "records" {
   name    = each.value.name
   type    = each.value.type
   ttl     = each.value.ttl
-  records = [ each.value.record ]
+  records = [each.value.record]
 
   zone_id = aws_route53_zone.instance_zone[0].zone_id
 }

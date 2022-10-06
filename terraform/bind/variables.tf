@@ -5,10 +5,30 @@ variable "instance_name" {
   default = ""
 }
 
-variable region { 
-  type = string 
+variable region {
+  type = string
 }
 
 variable domain_arn {
   type = string
+}
+
+variable bounce_topic_arn {
+  type = string
+  default = ""
+}
+
+variable complaint_topic_arn {
+  type = string
+  default = ""
+}
+
+variable delivery_topic_arn {
+  type = string
+  default = ""
+}
+
+variable notification_webhook {
+  type = string
+  default = ""
 }

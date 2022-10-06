@@ -115,6 +115,10 @@ provision:
 bind:
   plan_inputs: []
   user_inputs:
+  - field_name: notification_webhook
+    type: string
+    details: HTTPS endpoint to subscribe to feedback notifications
+    default: ""
   computed_inputs:
   - name: region
     default: ${instance.details["region"]}
@@ -132,6 +136,18 @@ bind:
     required: true
     type: string
     default: ${request.instance_id}
+  - name: bounce_topic_arn
+    default: ${instance.details["bounce_topic_arn"]}
+    overwrite: true
+    type: string
+  - name: complaint_topic_arn
+    default: ${instance.details["complaint_topic_arn"]}
+    overwrite: true
+    type: string
+  - name: delivery_topic_arn
+    default: ${instance.details["delivery_topic_arn"]}
+    overwrite: true
+    type: string
   template_refs:
     main: terraform/bind/main.tf
     outputs: terraform/bind/outputs.tf
@@ -150,6 +166,9 @@ bind:
   - field_name: secret_access_key
     type: string
     details: AWS Secret Access Key
+  - field_name: notification_webhook
+    type: string
+    details: Subscribed endpoint for email feedback notifications
 examples:
 - name: smtp
   description: SMTP base

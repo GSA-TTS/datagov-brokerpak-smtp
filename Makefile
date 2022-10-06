@@ -104,7 +104,7 @@ demo-up: ## Provision an SMTP instance and output the bound credentials
 	set -e ;\
 	eval "$$( $(CSB_SET_IDS) )" ;\
 	echo "Provisioning ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}" ;\
-	$(CSB_EXEC) client provision --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME}                     --params $(CLOUD_PROVISION_PARAMS) 2>&1 > /dev/null ;\
+	$(CSB_EXEC) client provision --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME}                     --params $(CLOUD_PROVISION_PARAMS) 2>&1 > ${INSTANCE_NAME}.provisioning.txt ;\
 	$(CSB_INSTANCE_WAIT) ${INSTANCE_NAME} ;\
 	echo "Binding ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding1" ;\
 	$(CSB_EXEC) client bind      --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} --bindingid binding1 --params $(CLOUD_BIND_PARAMS) | jq -r .response > ${INSTANCE_NAME}.binding.json ;\
@@ -115,7 +115,7 @@ demo-up-supplied: ## Provision an SMTP instance and output the bound credentials
 	set -e ;\
 	eval "$$( $(CSB_SET_IDS) )" ;\
 	echo "Provisioning ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}" ;\
-	$(CSB_EXEC) client provision --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME}                       --params '{ "domain": "test.com", "create_sns_topics": true }' 2>&1 > /dev/null ;\
+	$(CSB_EXEC) client provision --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME}                       --params '{ "domain": "test.com", "create_sns_topics": true }' 2>&1 > ${INSTANCE_NAME}.provisioning.txt ;\
 	$(CSB_INSTANCE_WAIT) ${INSTANCE_NAME} ;\
 	echo "Binding ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding2" ;\
 	$(CSB_EXEC) client bind      --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} --bindingid binding2 --params '{}' | jq -r .response > ${INSTANCE_NAME}.binding.json ;\
@@ -138,12 +138,12 @@ demo-down: ## Clean up data left over from tests and demos
 	@( \
 	set -e ;\
 	eval "$$( $(CSB_SET_IDS) )" ;\
-	echo "Unbinding ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding1" ;\
-	$(CSB_EXEC) client unbind      --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} --bindingid binding1 2>&1 > /dev/null || true ;\
-	echo "Unbinding ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding2" ;\
-	$(CSB_EXEC) client unbind      --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} --bindingid binding2 2>&1 > /dev/null || true ;\
-	echo "Deprovisioning ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}" ;\
-	$(CSB_EXEC) client deprovision   --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} 2>&1 > /dev/null || true ;\
+	echo "Unbinding ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding1" || tee -a ${INSTANCE_NAME}.binding.json ;\
+	$(CSB_EXEC) client unbind      --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} --bindingid binding1 2>&1 >> ${INSTANCE_NAME}.binding.json || true ;\
+	echo "Unbinding ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding2" || tee -a ${INSTANCE_NAME}.binding.json ;\
+	$(CSB_EXEC) client unbind      --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} --bindingid binding2 2>&1 >> ${INSTANCE_NAME}.binding.json || true ;\
+	echo "Deprovisioning ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}" || tee -a ${INSTANCE_NAME}.provisioning.txt ;\
+	$(CSB_EXEC) client deprovision   --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} 2>&1 >> ${INSTANCE_NAME}.provisioning.txt || true ;\
 	$(CSB_INSTANCE_WAIT) ${INSTANCE_NAME} || true;\
 	)
 

@@ -92,7 +92,11 @@ module "smtp_broker_policy" {
               "sns:DeleteTopic",
               "sns:SetTopicAttributes",
               "sns:GetTopicAttributes",
-              "sns:ListTagsForResource"
+              "sns:ListTagsForResource",
+
+              "sns:Subscribe",
+              "sns:Unsubscribe",
+              "sns:GetSubscriptionAttributes"
           ],
           "Resource": "*"
         }

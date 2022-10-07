@@ -23,9 +23,29 @@ Each brokered AWS SES instance provides:
 
 - If no domain is specified
   - SMTP credentials for sending mail from an auto-generated subdomain (suitable for development)
+  - Bounce, Complaint, and Delivery notifications can be sent to your server. See [Delivery Notifications](#delivery-notifications) for instructions
 - If a domain is specified
   - SMTP credentials for sending mail from the supplied domain
   - DNS records necessary for verifying domain ownership (TXT and DKIM)
+  - Bounce, Complaint, and Delivery notifications can be sent to your server. See [Delivery Notifications](#delivery-notifications) for instructions
+
+### Delivery Notifications
+
+[SES Delivery Notifications](https://docs.aws.amazon.com/ses/latest/dg/monitor-sending-activity-using-notifications-sns.html) can be configured by adding `notification_webhook: ` to the bind parameters.
+
+* The webhook must be an HTTPS endpoint, accessible to the internet.
+* [Documentation on message contents](https://docs.aws.amazon.com/ses/latest/dg/notification-contents.html)
+* **Important** the endpoint must be ready to [confirm the subscription](https://docs.aws.amazon.com/sns/latest/dg/SendMessageToHttp.confirm.html) during the bind process. Here is [an example](https://github.com/GSA/notifications-api/blob/d83a4331263d434ba1415ce652ed70737acd5e9f/app/notifications/sns_handlers.py#L51) of the confirmation process.
+
+Example manifest.yml:
+```
+services:
+  - name: smtp-service
+    parameters:
+      notification_webhook: https://my.server.gov/notifications/ses
+```
+
+If you are sure that you will not be using feedback notifications, you can prevent the SNS topics from being created by adding `"enable_feedback_notifications": false` to the provisioning parameters
 
 ## Development Prerequisites
 

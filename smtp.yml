@@ -66,7 +66,6 @@ provision:
     overwrite: true
     type: object
   - name: instance_name
-    required: true
     type: string
     default: ${request.instance_id}
   template_refs:
@@ -122,7 +121,6 @@ bind:
     overwrite: true
     type: string
   - name: instance_name
-    required: true
     type: string
     default: ${request.instance_id}
   - name: bounce_topic_arn

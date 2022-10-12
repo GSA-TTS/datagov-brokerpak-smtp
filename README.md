@@ -45,6 +45,10 @@ services:
       notification_webhook: https://my.server.gov/notifications/ses
 ```
 
+Included in the bind credentials will be the Amazon ARNs for `bounce_topic_arn`, `complaint_topic_arn`, and `delivery_topic_arn`. These can be used to
+validate the incoming webhooks as coming from the correct source, and help determine between the three message types your webhook will be receiving. They can
+be ignored if you are not using the feedback notifications.
+
 If you are sure that you will not be using feedback notifications, you can prevent the SNS topics from being created by adding `"enable_feedback_notifications": false` to the provisioning parameters
 
 ## Development Prerequisites

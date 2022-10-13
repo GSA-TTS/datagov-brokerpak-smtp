@@ -1,4 +1,4 @@
-# When a tag is pushed, create a tag-named release with the brokerpak in it 
+# When a tag is pushed, create a tag-named release with the brokerpak in it
 name: 'release'
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
       run:
         shell: bash
 
-    steps:  
+    steps:
     - name: Install the eden OSBAPI CLI tool
       run: |
         wget -q -O - https://raw.githubusercontent.com/starkandwayne/homebrew-cf/master/public.key | sudo apt-key add -
@@ -24,10 +24,10 @@ jobs:
         sudo apt-get install eden
     - name: Install checkdmarc
       run: |
-        pip install checkdmarc
+        pip install checkdmarc==4.4.2
     - name: Check out repository
       uses: actions/checkout@v2
-      with: 
+      with:
         fetch-depth: '0'
 
     - name: Build the brokerpak
@@ -41,4 +41,4 @@ jobs:
       with:
         artifacts: "*.brokerpak"
         artifactErrorsFailBuild: true
-        token: ${{ secrets.GITHUB_TOKEN }}      
+        token: ${{ secrets.GITHUB_TOKEN }}

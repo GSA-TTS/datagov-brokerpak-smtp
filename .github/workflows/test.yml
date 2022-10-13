@@ -23,7 +23,7 @@ jobs:
     steps:
     - name: Install checkdmarc
       run: |
-        pip install checkdmarc
+        pip install checkdmarc==4.4.2
     - uses: actions/checkout@v2
       with:
         fetch-depth: '0'

@@ -9,8 +9,6 @@ SECURITY_USER_PASSWORD := $(or $(SECURITY_USER_PASSWORD), pass)
 SERVICE_NAME=datagov-smtp
 PLAN_NAME=base
 CSB_EXEC=docker exec csb-service-$(SERVICE_NAME) /bin/cloud-service-broker
-SERVICE_ID=b90ace67-954b-4b33-8f84-95cacc55b94c
-PLAN_ID=dc109a6e-c4a8-4fbb-8c49-acf9740ab819
 
 CSB_SET_IDS=$(CSB_EXEC) client catalog | jq -r '.response.services[]| select(.name=="$(SERVICE_NAME)") | {serviceid: .id, planid: .plans[0].id} | to_entries | .[] | "export " + .key + "=" + (.value | @sh)'
 
@@ -59,7 +57,6 @@ check-ids:
 	)
 
 clean: demo-down down ## Bring down the broker service if it's up and clean out the database
-	@-docker rm -f csb-service-$(SERVICE_NAME)
 	@-rm *.brokerpak
 
 # Origin of the subdirectory dependency solution:
@@ -83,7 +80,6 @@ up: ## Run the broker service with the brokerpak configured. The broker listens 
 	--health-interval=2s \
 	--health-retries=30 \
 	-d \
-	--rm \
 	$(CSB) serve
 	@./bin/docker-wait.sh csb-service-$(SERVICE_NAME)
 	@docker ps -l
@@ -104,7 +100,7 @@ demo-up: ## Provision an SMTP instance and output the bound credentials
 	set -e ;\
 	eval "$$( $(CSB_SET_IDS) )" ;\
 	echo "Provisioning ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}" ;\
-	$(CSB_EXEC) client provision --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME}                     --params $(CLOUD_PROVISION_PARAMS) 2>&1 > /dev/null ;\
+	$(CSB_EXEC) client provision --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME}                     --params $(CLOUD_PROVISION_PARAMS) 2>&1 > ${INSTANCE_NAME}.provisioning.txt ;\
 	$(CSB_INSTANCE_WAIT) ${INSTANCE_NAME} ;\
 	echo "Binding ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding1" ;\
 	$(CSB_EXEC) client bind      --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} --bindingid binding1 --params $(CLOUD_BIND_PARAMS) | jq -r .response > ${INSTANCE_NAME}.binding.json ;\
@@ -115,14 +111,15 @@ demo-up-supplied: ## Provision an SMTP instance and output the bound credentials
 	set -e ;\
 	eval "$$( $(CSB_SET_IDS) )" ;\
 	echo "Provisioning ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}" ;\
-	$(CSB_EXEC) client provision --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME}                       --params '{ "domain": "test.com" }' 2>&1 > /dev/null ;\
+	$(CSB_EXEC) client provision --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME}                       --params '{ "domain": "test.com", "enable_feedback_notifications": false }' 2>&1 > ${INSTANCE_NAME}.provisioning.txt ;\
 	$(CSB_INSTANCE_WAIT) ${INSTANCE_NAME} ;\
 	echo "Binding ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding2" ;\
 	$(CSB_EXEC) client bind      --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} --bindingid binding2 --params '{}' | jq -r .response > ${INSTANCE_NAME}.binding.json ;\
 	)
 
 demo-showcreds: ## Show the bound credentials
-	@$(CSB_EXEC) cloud-service-broker client credentials --bindingid binding1 --instanceid ${INSTANCE_NAME} --serviceid ${SERVICE_ID} --planid ${PLAN_ID}
+	cat ${INSTANCE_NAME}.binding.json
+
 
 demo-run: SHELL:=/bin/bash
 demo-run: ## Run tests on the demo instance
@@ -138,12 +135,12 @@ demo-down: ## Clean up data left over from tests and demos
 	@( \
 	set -e ;\
 	eval "$$( $(CSB_SET_IDS) )" ;\
-	echo "Unbinding ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding1" ;\
-	$(CSB_EXEC) client unbind      --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} --bindingid binding1 2>&1 > /dev/null || true ;\
-	echo "Unbinding ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding2" ;\
-	$(CSB_EXEC) client unbind      --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} --bindingid binding2 2>&1 > /dev/null || true ;\
-	echo "Deprovisioning ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}" ;\
-	$(CSB_EXEC) client deprovision   --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} 2>&1 > /dev/null || true ;\
+	echo "Unbinding ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding1" || tee -a ${INSTANCE_NAME}.binding.json ;\
+	$(CSB_EXEC) client unbind      --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} --bindingid binding1 2>&1 >> ${INSTANCE_NAME}.binding.json || true ;\
+	echo "Unbinding ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding2" || tee -a ${INSTANCE_NAME}.binding.json ;\
+	$(CSB_EXEC) client unbind      --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} --bindingid binding2 2>&1 >> ${INSTANCE_NAME}.binding.json || true ;\
+	echo "Deprovisioning ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}" || tee -a ${INSTANCE_NAME}.provisioning.txt ;\
+	$(CSB_EXEC) client deprovision   --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} 2>&1 >> ${INSTANCE_NAME}.provisioning.txt || true ;\
 	$(CSB_INSTANCE_WAIT) ${INSTANCE_NAME} || true;\
 	)
 
@@ -159,4 +156,3 @@ all: clean build up test down ## Clean and rebuild, then bring up the server, ru
 .PHONY: help
 help: ## This help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-10s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
-

@@ -52,6 +52,10 @@ provision:
       type: string
       details: Email to recieve DMARC errors
       default: "datagovhelp@gsa.gov"
+    - field_name: enable_feedback_notifications
+      type: boolean
+      details: Flag to toggle creation of SNS topics for feedback notifications
+      default: true
   computed_inputs:
   - name: default_domain
     overwrite: true
@@ -62,11 +66,11 @@ provision:
     overwrite: true
     type: object
   - name: instance_name
-    required: true
     type: string
     default: ${request.instance_id}
   template_refs:
     main: terraform/provision/main.tf
+    notification: terraform/provision/notification.tf
     outputs: terraform/provision/outputs.tf
     provider: terraform/provision/provider.tf
     variables: terraform/provision/variables.tf
@@ -87,9 +91,22 @@ provision:
   - field_name: domain_arn
     type: string
     details: Instance SES domain identity (used when creating bindings)
+  - field_name: bounce_topic_arn
+    type: string
+    details: ARN of the SNS topic receiving bounce feedback notifications
+  - field_name: complaint_topic_arn
+    type: string
+    details: ARN of the SNS topic receiving complaint feedback notifications
+  - field_name: delivery_topic_arn
+    type: string
+    details: ARN of the SNS topic receiving delivery feedback notifications
 bind:
   plan_inputs: []
   user_inputs:
+  - field_name: notification_webhook
+    type: string
+    details: HTTPS endpoint to subscribe to feedback notifications
+    default: ""
   computed_inputs:
   - name: region
     default: ${instance.details["region"]}
@@ -104,9 +121,20 @@ bind:
     overwrite: true
     type: string
   - name: instance_name
-    required: true
     type: string
     default: ${request.instance_id}
+  - name: bounce_topic_arn
+    default: ${instance.details["bounce_topic_arn"]}
+    overwrite: true
+    type: string
+  - name: complaint_topic_arn
+    default: ${instance.details["complaint_topic_arn"]}
+    overwrite: true
+    type: string
+  - name: delivery_topic_arn
+    default: ${instance.details["delivery_topic_arn"]}
+    overwrite: true
+    type: string
   template_refs:
     main: terraform/bind/main.tf
     outputs: terraform/bind/outputs.tf
@@ -118,10 +146,16 @@ bind:
     details: SMTP server
   - field_name: smtp_user
     type: string
-    details: SMTP user
+    details: SMTP user and AWS Access Key ID
   - field_name: smtp_password
     type: string
     details: SMTP password
+  - field_name: secret_access_key
+    type: string
+    details: AWS Secret Access Key
+  - field_name: notification_webhook
+    type: string
+    details: Subscribed endpoint for email feedback notifications
 examples:
 - name: smtp
   description: SMTP base

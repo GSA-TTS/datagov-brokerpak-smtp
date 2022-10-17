@@ -11,7 +11,7 @@ variable "default_domain" {
 }
 
 variable "instance_name" {
-  type    = string
+  type = string
 }
 
 variable "region" {
@@ -25,4 +25,10 @@ variable "email_receipt_error" {
 variable "labels" {
   type    = map(any)
   default = {}
+}
+
+variable "enable_feedback_notifications" {
+  type        = bool
+  description = "Toggle whether to create SNS topics for feedback notifications"
+  default     = true
 }

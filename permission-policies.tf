@@ -1,5 +1,5 @@
 # This Terraform code will create an AWS user named "ssb-smtp-broker" with the
-# minimum policies in place that are needed for this brokerpak to operate. 
+# minimum policies in place that are needed for this brokerpak to operate.
 
 locals {
   this_aws_account_id    = data.aws_caller_identity.current.account_id
@@ -82,6 +82,21 @@ module "smtp_broker_policy" {
           "Effect": "Allow",
           "Action": [
               "route53:ListHostedZones"
+          ],
+          "Resource": "*"
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+              "sns:CreateTopic",
+              "sns:DeleteTopic",
+              "sns:SetTopicAttributes",
+              "sns:GetTopicAttributes",
+              "sns:ListTagsForResource",
+
+              "sns:Subscribe",
+              "sns:Unsubscribe",
+              "sns:GetSubscriptionAttributes"
           ],
           "Resource": "*"
         }

@@ -55,7 +55,7 @@ provision:
     - field_name: enable_feedback_notifications
       type: boolean
       details: Flag to toggle creation of SNS topics for feedback notifications
-      default: true
+      default: false
   computed_inputs:
   - name: default_domain
     overwrite: true

@@ -30,5 +30,5 @@ variable "labels" {
 variable "enable_feedback_notifications" {
   type        = bool
   description = "Toggle whether to create SNS topics for feedback notifications"
-  default     = true
+  default     = false
 }

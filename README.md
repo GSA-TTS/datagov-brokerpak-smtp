@@ -31,7 +31,10 @@ Each brokered AWS SES instance provides:
 
 ### Delivery Notifications
 
-[SES Delivery Notifications](https://docs.aws.amazon.com/ses/latest/dg/monitor-sending-activity-using-notifications-sns.html) can be configured by adding `notification_webhook: ` to the bind parameters.
+[SES Delivery Notifications](https://docs.aws.amazon.com/ses/latest/dg/monitor-sending-activity-using-notifications-sns.html) can be configured by:
+
+1. Add `"enable_feedback_notifications": true` to the provisioning parameters
+2. Add `"notification_webhook": "HTTPS_WEBHOOK_ENDPOINT"` to the bind parameters.
 
 * The webhook must be an HTTPS endpoint, accessible to the internet.
 * [Documentation on message contents](https://docs.aws.amazon.com/ses/latest/dg/notification-contents.html)
@@ -49,7 +52,6 @@ Included in the bind credentials will be the Amazon ARNs for `bounce_topic_arn`,
 validate the incoming webhooks as coming from the correct source, and help determine between the three message types your webhook will be receiving. They can
 be ignored if you are not using the feedback notifications.
 
-If you are sure that you will not be using feedback notifications, you can prevent the SNS topics from being created by adding `"enable_feedback_notifications": false` to the provisioning parameters
 
 ## Development Prerequisites
 

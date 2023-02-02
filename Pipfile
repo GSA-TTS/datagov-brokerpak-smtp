@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-checkdmarc = "==4.4.2"
+checkdmarc = ">=4.4.5"
 
 [dev-packages]
 

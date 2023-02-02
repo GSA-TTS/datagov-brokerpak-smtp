@@ -23,6 +23,7 @@ provision:
       details: The region of the SES service.
       default: ${config("aws.default_region")}
       enum:
+        us-gov-west-1: us-gov-west-1
         us-east-2 : us-east-2
         us-east-1 : us-east-1
         us-west-1 : us-west-1
@@ -55,7 +56,7 @@ provision:
     - field_name: enable_feedback_notifications
       type: boolean
       details: Flag to toggle creation of SNS topics for feedback notifications
-      default: true
+      default: false
   computed_inputs:
   - name: default_domain
     overwrite: true

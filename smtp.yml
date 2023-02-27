@@ -57,6 +57,10 @@ provision:
       type: boolean
       details: Flag to toggle creation of SNS topics for feedback notifications
       default: false
+    - field_name: mail_from_subdomain
+      type: string
+      details: Subdomain to use as sending email server
+      default: ""
   computed_inputs:
   - name: default_domain
     overwrite: true

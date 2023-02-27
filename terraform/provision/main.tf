@@ -17,8 +17,18 @@ locals {
     records = ["v=DMARC1; p=quarantine; rua=mailto:${var.email_receipt_error}; ruf=mailto:${var.email_receipt_error}"]
   }
 
+  setting_mail_from = (var.mail_from_subdomain == "" ? false : true)
+  mail_from_domain  = "${var.mail_from_subdomain}.${aws_ses_domain_identity.identity.domain}"
+
+  mx_verification_record = {
+    name    = local.mail_from_domain
+    type    = "MX"
+    ttl     = "600"
+    records = ["10 feedback-smtp.${var.region}.amazonses.com"]
+  }
+
   spf_verification_record = {
-    name    = local.domain
+    name    = (local.setting_mail_from ? local.mail_from_domain : local.domain)
     type    = "TXT"
     ttl     = "600"
     records = ["v=spf1 include:amazonses.com -all"]
@@ -52,6 +62,12 @@ locals {
       ttl     = "${value.ttl}"
       records = [%{for record in value.records}"${record}"%{endfor~}]
     } %{endfor}
+    %{if local.setting_mail_from}mx_verification_record = {
+      name    = "${local.mx_verification_record.name}"
+      type    = "${local.mx_verification_record.type}"
+      ttl     = "${local.mx_verification_record.ttl}"
+      records = [%{for record in local.mx_verification_record.records}"${record}"%{endfor~}]
+    } %{endif}
   }
   EOT
 
@@ -84,4 +100,11 @@ resource "aws_ses_domain_identity" "identity" {
 
 resource "aws_ses_domain_dkim" "dkim" {
   domain = aws_ses_domain_identity.identity.domain
+}
+
+resource "aws_ses_domain_mail_from" "mail_from" {
+  count = (local.setting_mail_from ? 1 : 0)
+
+  domain           = aws_ses_domain_identity.identity.domain
+  mail_from_domain = local.mail_from_domain
 }

@@ -1,4 +1,4 @@
-# Get the configured default DNS Zone 
+# Get the configured default DNS Zone
 data "aws_route53_zone" "parent_zone" {
   count = (local.manage_domain ? 1 : 0)
   name  = var.default_domain
@@ -36,6 +36,18 @@ resource "aws_route53_record" "records" {
   type    = each.value.type
   ttl     = each.value.ttl
   records = [each.value.record]
+
+  zone_id = aws_route53_zone.instance_zone[0].zone_id
+}
+
+# Create MX record if needed
+resource "aws_route53_record" "mail_from_mx_record" {
+  count = (local.manage_domain && local.setting_mail_from ? 1 : 0)
+
+  name    = local.mx_verification_record.name
+  type    = local.mx_verification_record.type
+  ttl     = local.mx_verification_record.ttl
+  records = local.mx_verification_record.records
 
   zone_id = aws_route53_zone.instance_zone[0].zone_id
 }

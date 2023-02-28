@@ -29,6 +29,14 @@ Each brokered AWS SES instance provides:
   - DNS records necessary for verifying domain ownership (TXT and DKIM)
   - Bounce, Complaint, and Delivery notifications can be sent to your server. See [Delivery Notifications](#delivery-notifications) for instructions
 
+### Custom MAIL FROM
+
+The broker can set up a [custom MAIL FROM](https://docs.aws.amazon.com/ses/latest/dg/mail-from.html) by passing in the `mail_from_subdomain` variable value.
+
+This should just be the subdomain that mail will appear to be coming from and will be prepended to your given `domain`.
+
+The provision outputs will include the required DNS records to validate this setting in the `required_records` output.
+
 ### Delivery Notifications
 
 [SES Delivery Notifications](https://docs.aws.amazon.com/ses/latest/dg/monitor-sending-activity-using-notifications-sns.html) can be configured by:

@@ -32,3 +32,9 @@ variable "enable_feedback_notifications" {
   description = "Toggle whether to create SNS topics for feedback notifications"
   default     = false
 }
+
+variable "mail_from_subdomain" {
+  type        = string
+  description = "Subdomain to set as the mail-from value"
+  default     = ""
+}

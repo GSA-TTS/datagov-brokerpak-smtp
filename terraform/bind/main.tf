@@ -21,21 +21,22 @@ resource "aws_iam_user_policy" "user_policy" {
 
   user = aws_iam_user.user.name
 
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action":[
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = [
         "ses:SendEmail",
         "ses:SendRawEmail"
-      ],
-      "Resource": "${var.domain_arn}"
-    }
-  ]
-}
-EOF
+      ]
+      Resource = var.domain_arn
+      Condition = {
+        "ForAnyValue:IpAddress" = {
+          "aws:SourceIp" = var.source_ips
+        }
+      }
+    }]
+  })
 }
 
 resource "aws_sns_topic_subscription" "bounce_subscription" {

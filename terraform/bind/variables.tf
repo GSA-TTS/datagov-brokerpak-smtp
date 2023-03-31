@@ -13,6 +13,10 @@ variable "domain_arn" {
   type = string
 }
 
+variable "source_ips" {
+  type = list(string)
+}
+
 variable "bounce_topic_arn" {
   type    = string
   default = ""

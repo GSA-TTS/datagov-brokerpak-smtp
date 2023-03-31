@@ -6,3 +6,7 @@ bounce_topic_arn     = ""                   # SNS bounce topic ARN from provisio
 complaint_topic_arn  = ""                   # SNS complaint topic ARN from provisioning output
 delivery_topic_arn   = ""                   # SNS delivery topic ARN from provisioning output
 notification_webhook = ""                   # Webhook address to receive SNS notifications
+source_ips = [
+  "52.222.122.97/32",
+  "52.222.123.172/32"
+]

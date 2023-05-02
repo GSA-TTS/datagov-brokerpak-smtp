@@ -29,6 +29,32 @@ Each brokered AWS SES instance provides:
   - DNS records necessary for verifying domain ownership (TXT and DKIM)
   - Bounce, Complaint, and Delivery notifications can be sent to your server. See [Delivery Notifications](#delivery-notifications) for instructions
 
+### IP-limited security credentials
+
+The credentials created by the bind operation sets a condition on the IAM policy that limits the IP addresses that may use the credential. By default, this gets set to the egress IP addresses for cloud.gov.
+
+To create a service key that will be valid from IP 1.2.3.4:
+
+`cf create-service-key smtp-instance-name service-key-name -c '["source_ips": ["1.2.3.4/32"]]'`
+
+Or in terraform to set to a variable:
+
+```
+resource "cloudfoundry_service_key" "smtp_key" {
+  name             = local.key_name
+  service_instance = data.cloudfoundry_service_instance.smtp_email.id
+  params_json = jsonencode({
+    source_ips = [var.source_ip]
+  })
+}
+```
+
+More information about source ip conditions can be found in these documents:
+
+* https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_aws_deny-ip.html
+* https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-sourceip
+* https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_multi-value-conditions.html#reference_policies_multi-key-or-value-conditions
+
 ### Custom MAIL FROM
 
 The broker can set up a [custom MAIL FROM](https://docs.aws.amazon.com/ses/latest/dg/mail-from.html) by passing in the `mail_from_subdomain` variable value.

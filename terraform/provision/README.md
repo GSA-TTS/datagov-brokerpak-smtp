@@ -4,8 +4,11 @@ You can develop and test the Terraform code for provisioning in isolation from
 the broker context here.
 
 1. Copy `terraform.tfvars-template` to `terraform.tfvars`, then edit the content
-   appropriately. In particular, customize the `instance` and `subdomain`
-   parameters to avoid collisions in the target AWS account!
+   appropriately. In particular, set these parameters:
+   - `instance_name` should be set to something unique to avoid collisions in the target AWS account!
+   - `domain` should be an empty string if you want to run the full suite of Terraform resources including DNS records.
+   - `default_domain` should be a domain name including one or more subdomains, such as `dev.ssb.notify.gov`
+
 1. Set these three environment variables:
 
     - AWS_ACCESS_KEY_ID

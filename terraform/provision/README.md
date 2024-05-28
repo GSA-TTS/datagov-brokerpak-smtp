@@ -31,10 +31,13 @@ the broker context here.
 
     ```bash
     $ docker run -v `pwd`:`pwd` -w `pwd` -e HOME=`pwd` --user $(id -u):$(id -g) -e TERM -it --rm -e AWS_SECRET_ACCESS_KEY -e AWS_ACCESS_KEY_ID -e AWS_DEFAULT_REGION smtp-provision:latest
+    ```
 
-    [within the container]
+1. Within that container:
+    ```bash
     terraform init
-    terraform apply -auto-approve
+    terraform apply
     [tinker in your editor, run terraform apply, inspect the cluster, repeat]
     terraform destroy -auto-approve
     exit
+    ```

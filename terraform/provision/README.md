@@ -30,7 +30,7 @@ the broker context here.
    that you'll have permission to remove any files that get created.
 
     ```bash
-    $ docker run -v `pwd`:`pwd` -w `pwd` -e HOME=`pwd` --user $(id -u):$(id -g) -e TERM -it --rm -e AWS_SECRET_ACCESS_KEY -e AWS_ACCESS_KEY_ID -e AWS_DEFAULT_REGION smtp-provision:latest
+    docker run -v `pwd`:`pwd` -w `pwd` -e HOME=`pwd` --user $(id -u):$(id -g) -e TERM -it --rm -e AWS_SECRET_ACCESS_KEY -e AWS_ACCESS_KEY_ID -e AWS_DEFAULT_REGION smtp-provision:latest
     ```
 
 1. Within that container:
@@ -41,3 +41,14 @@ the broker context here.
     terraform destroy -auto-approve
     exit
     ```
+
+## Troubleshooting
+
+```
+Error creating SES domain identity verification: Expected domain verification Success, but was in state Failed
+```
+This error occurs when [the timeout](https://github.com/GSA-TTS/datagov-brokerpak-smtp/blob/767bcb71179494a0578c018f8338df4711f1c4fc/terraform/provision/verification.tf#L61) to verify the domain identity is reached. This can be a DNS problem.
+
+Ensure that the domain or subdomain you are working in is reachable by DNS. Ensure that the zone(s) above your subdomain have DNS records which point to your zone &mdash; for example if you are using a `default_domain` of `dev.ssb.notify.gov`, ensure that the DNS records at `ssb.notify.gov` correctly indicate a `dev` subdomain. It will need an NS and a DS record.
+
+The [outputs.tf file of usnotify-ssb](https://github.com/GSA/usnotify-ssb/blob/main/outputs.tf#L16) generates instructions on creating DNS records. 

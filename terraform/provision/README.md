@@ -49,4 +49,10 @@ Error creating SES domain identity verification: Expected domain verification Su
 ```
 This error occurs when [the timeout](https://github.com/GSA-TTS/datagov-brokerpak-smtp/blob/767bcb71179494a0578c018f8338df4711f1c4fc/terraform/provision/verification.tf#L61) to verify the domain identity is reached. This can be a DNS problem.
 
-Ensure that the domain or subdomain you are working in is reachable by DNS. Ensure that the zone(s) above your subdomain have DNS records which point to your zone &mdash; for example if you are using a `default_domain` of `dev.ssb.notify.gov`, ensure that the DNS records at `ssb.notify.gov` correctly indicate a `dev` subdomain. It will need an NS and a DS record.
+Ensure that the domain or subdomain you are working in is reachable by DNS. Ensure that the zone(s) above your subdomain have DNS records which point to your zone &mdash; for example if you are using a `default_domain` of `dev.ssb.notify.gov`, ensure that the DNS records at `ssb.notify.gov` correctly indicate a `dev` subdomain.
+
+This command will display expected DNS configuration:
+```bash
+terraform show
+```
+More DNS information is available if you run the above command within the Supplementary Service Broker into which you install this Brokerpak &mdash; so, within the [datagov-ssb](https://github.com/GSA/datagov-ssb) codebase or your fork of it.

@@ -7,15 +7,17 @@ platforms:
 - os: linux
   arch: amd64
 terraform_binaries:
-- name: terraform
-  version: 0.13.7
-  source: https://github.com/hashicorp/terraform/archive/v0.13.7.zip
+- name: tofu
+  version: 1.9.0
+  source: https://github.com/opentofu/opentofu/archive/v1.9.0.zip
 - name: terraform-provider-aws
-  version: 3.46.0
-  source: https://github.com/terraform-providers/terraform-provider-aws/archive/v3.46.0.zip
+  version: 5.88.0
+  source: https://releases.hashicorp.com/terraform-provider-aws/5.88.0/terraform-provider-aws_5.88.0_linux_amd64.zip
+  provider: registry.opentofu.org/hashicorp/aws
 - name: terraform-provider-null
-  version: 3.1.0
-  source: https://releases.hashicorp.com/terraform-provider-null/3.1.0/terraform-provider-null_3.1.0_linux_amd64.zip
+  version: 3.2.3
+  source: https://releases.hashicorp.com/terraform-provider-null/3.2.3/terraform-provider-null_3.2.3_linux_amd64.zip
+  provider: registry.opentofu.org/hashicorp/null
 service_definitions:
 - smtp.yml
 parameters: []

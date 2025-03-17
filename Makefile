@@ -2,7 +2,7 @@
 .DEFAULT_GOAL := help
 
 DOCKER_OPTS=--rm -v $(PWD):/brokerpak -w /brokerpak
-CSB=ghcr.io/gsa/cloud-service-broker:v0.10.0gsa
+CSB=ghcr.io/gsa/cloud-service-broker:v2.0.3gsa
 SECURITY_USER_NAME := $(or $(SECURITY_USER_NAME), user)
 SECURITY_USER_PASSWORD := $(or $(SECURITY_USER_PASSWORD), pass)
 
@@ -111,7 +111,7 @@ demo-up-supplied: ## Provision an SMTP instance and output the bound credentials
 	set -e ;\
 	eval "$$( $(CSB_SET_IDS) )" ;\
 	echo "Provisioning ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}" ;\
-	$(CSB_EXEC) client provision --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME}                       --params '{ "domain": "test.com", "enable_feedback_notifications": false, "mail_from_subdomain": "mail" }' 2>&1 > ${INSTANCE_NAME}.provisioning.txt ;\
+	$(CSB_EXEC) client provision --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME}                       --params '{ "domain": "example.com", "enable_feedback_notifications": false, "mail_from_subdomain": "mail" }' 2>&1 > ${INSTANCE_NAME}.provisioning.txt ;\
 	$(CSB_INSTANCE_WAIT) ${INSTANCE_NAME} ;\
 	echo "Binding ${SERVICE_NAME}:${PLAN_NAME}:${INSTANCE_NAME}:binding2" ;\
 	$(CSB_EXEC) client bind      --serviceid $$serviceid --planid $$planid --instanceid ${INSTANCE_NAME} --bindingid binding2 --params '{}' | jq -r .response > ${INSTANCE_NAME}.binding.json ;\

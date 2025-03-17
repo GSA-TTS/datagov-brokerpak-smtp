@@ -1,7 +1,14 @@
-FROM hashicorp/terraform:0.13.7 as terraform
+FROM alpine:3.20 AS tofu
 
-RUN apk update
-RUN apk add --update git 
+ADD install-opentofu.sh /install-opentofu.sh
+RUN chmod +x /install-opentofu.sh
+RUN apk add gpg gpg-agent
+RUN ./install-opentofu.sh --install-method standalone --install-path / --symlink-path -
+
+FROM ubuntu:20.04
+
+COPY --from=tofu /tofu /usr/local/bin/tofu
+RUN apt-get update && apt-get install -y git
 
 ENTRYPOINT ["/bin/sh"]
 

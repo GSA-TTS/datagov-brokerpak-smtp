@@ -6,7 +6,7 @@ on:
 
 jobs:
   make:
-    name: 'Make'
+    name: 'Make test'
     runs-on: ubuntu-latest
     env:
       # For storing the Terraform state for the deployment
@@ -46,16 +46,17 @@ jobs:
         INSTANCE_NAME="$(echo ci-test1-${{ github.event.pull_request.number }}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT})"
         echo "INSTANCE_NAME=${INSTANCE_NAME}" | tee -a $GITHUB_ENV
 
-    - name: Run examples (tests if NO domain is supplied)
-      run: make up && make test && make down
+    - name: Bring up the CSB in Docker
+      run: make up
 
-    - name: Set the instance name for subsequent steps (Test 2)
-      run: |
-        INSTANCE_NAME="$(echo ci-test2-${{ github.event.pull_request.number }}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT})"
-        echo "INSTANCE_NAME=${INSTANCE_NAME}" | tee -a $GITHUB_ENV
+    - name: Run tests if NO domain is supplied
+      run: make test
 
-    - name: Run examples (tests if a domain IS supplied)
-      run: make up && make test-supplied && make down
+    - name: Run tests if a domain IS supplied
+      run: make test-supplied 
+
+    - name: Bring down the CSB in Docker
+      run: make down
 
     - name: Clean up if there was a failure
       if: ${{ failure() }}

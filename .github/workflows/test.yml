@@ -56,7 +56,9 @@ jobs:
 
     - name: Run examples (tests if a domain IS supplied)
       # wait for the container to come down before we try to bring it back up
-      run: docker wait csb-service-datagov-smtp || make up && make test-supplied && make down
+      run: |
+        docker wait csb-service-datagov-smtp
+        make up && make test-supplied && make down
 
     - name: Clean up if there was a failure
       if: ${{ failure() }}

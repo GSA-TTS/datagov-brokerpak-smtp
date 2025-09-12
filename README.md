@@ -1,5 +1,7 @@
 # smtp-brokerpak
 
+DEPRECATED 2025-09-12: This broker is no longer used, no longer maintained, and the repository is archived. 
+
 ## Why this project
 
 The SMTP brokerpak is a
